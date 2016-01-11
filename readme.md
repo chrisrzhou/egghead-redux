@@ -216,3 +216,106 @@ class TodoApp extends Component {
 }
 
 ```
+
+## React Provider
+To help avoid overwriting boilerplate and passing `store` down explicitly via
+`props`, we can pass it down implicitly via `context`.  To do this, we simply
+need to write a provider class with a special React method `getChildContext`
+and apply the following in container components that depend on stores.
+
+All components that wish to register to the `context` store will simply opt in
+by setting.
+
+```
+// provider
+class Provider extends Component {
+  getChildContext() {
+    retun {
+      store: this.props.store,
+    };
+  }
+  render() {
+    return this.props.children;
+  }
+}
+// this is required to make sure component receives context
+Provider.childContextTypes = {
+  store: React.PropTypes.object,
+};
+
+// render childs under Provider and initiate store in Provider
+ReactDOM.render(
+  <Provider store={createStore(todoApp)}>
+    <TodoApp />
+  </Provider>,
+  document.getElementbyId('root')
+);
+
+// container component example
+class FilterLink extends Component {
+  componentDidMount() {
+    const {store} = this.context;
+    this.unsubscribe = store.subscribe(() =>
+      this.forceUpdate();
+    );
+  }
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
+  render() {
+    const props = this.props;
+    const {store} = this.context;
+    const state = store.getState();
+
+    return() {
+      ...
+    }
+  }
+}
+// mandatory to register and receive store from context
+FilterLink.contextTypes = {
+  store: React.PropTypes.object,
+};
+```
+
+**WARNING:**
+`context` acts like a global variable that transmits data across components.
+It's not a good practice to do this in general so use it sparingly.  The API
+is also not very stable so things may change.
+
+```
+component.contextTypes = {
+store: React.PropTypes.object,
+}
+```
+
+## React Redux
+This is utility library that helps greatly reduce the amount of boilerplate
+required when writing `Provider` and container components that connect to the
+store.
+
+It also contains the highly useful method `connect` that helps connect
+store state and dispatch action to the container component.  All we have to do
+is to define two functions to pass to the `connect` function, which will help
+create the container component.
+
+```
+const mapStateToProps = (state, props) => {
+  return {
+    propName1: ...,
+    propName2: ...,
+    ...
+  };
+}
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    propName1: ...,
+    propName2: ...,
+    ...
+  };
+}
+const ContainerComponent1 = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(PresentationalComponent1);
+```
