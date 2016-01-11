@@ -20,11 +20,31 @@ const Counter = ({
 }) => (
   <div>
     <h1>{value}</h1>
-    <button onClick={onIncrement}>+</button>
     <button onClick={onDecrement}>-</button>
+    <button onClick={onIncrement}>+</button>
   </div>
 );
 
+/**
+ * Manual implementation of createStore
+ */
+// const createStore = (reducer) => {
+//   let state;
+//   let listeners = [];
+//   const getState = () => state;
+//   const dispatch = (action) => {
+//     state = reducer(action, state);
+//     listeners.forEach(listener => listener());
+//   };
+//   const subscribe = (listener) => {
+//     listeners.push(listener);
+//     return () => {
+//       listeners = listeners.filter(l => l !== listener);
+//     };
+//   };
+//   dispatch({});
+//   return {getState, dispatch, subscribe}
+// };
 const store = createStore(counter);
 const render = () => {
   ReactDOM.render(
@@ -41,7 +61,7 @@ const render = () => {
         })
       }
     />,
-    document.getElementById('root')
+    document.getElementById('counter')
   );
 };
 
