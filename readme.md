@@ -36,7 +36,8 @@ The Redux store is an object with 3 important functions:
 - `subscribe`
 
 The implementation of the Redux store is very simple and looks very similar to:
-```
+
+```js
 const createStore = (reducer) => {
   let state;
   let listeners = [];
@@ -65,7 +66,7 @@ the original object (as you can check with the `deepFreeze` library).
 Instead, we should use `concat`, `slice`, `map` and the spread operator
 in ES6 `...` to accomplish these array mutations.
 
-```
+```js
 // Add an item
 list.push(0);  // mutations
 list.concat([0]);  // no mutations
@@ -85,7 +86,7 @@ To avoid object mutations, we should use `Object.assign()` in ES6 and the spread
 operator in ES7 `...`
 
 
-```
+```js
 // mutations
 const toggleTodo = (todo) => {
   todo.completed = !todo.completed;
@@ -134,7 +135,7 @@ state object that is being returned.  This scales and is modular, allowing
 developers to build new features to the state tree without influencing
 existing attributes in the state tree. For example,
 
-```
+```js
 // Current state tree consisting of array of todos
 const todos = (state, action) => {...};
 
@@ -165,10 +166,13 @@ components if you choose to switch out Redux for another framework e.g. Relay.
 But it could present quite a lot of extra work and boilerplate since more props
 have to be passed down to leave components form the container component.
 
-We should also use the functional style of writing child components
-as in React v0.14+.
+We should also use the functional style of writing stateless components
+as in React v0.14+.  These components are pure functions of their props.
+They are stateless and do not have lifecycle methods (e.g. `componentDidMount`,
+`componentWillMount`, `render`), as compared to their `extends React.Component`
+class-based components.
 
-```
+```js
 // presentation component
 const Todo = ({
   onClick,
@@ -226,7 +230,7 @@ and apply the following in container components that depend on stores.
 All components that wish to register to the `context` store will simply opt in
 by setting.
 
-```
+```js
 // provider
 class Provider extends Component {
   getChildContext() {
@@ -283,12 +287,6 @@ FilterLink.contextTypes = {
 It's not a good practice to do this in general so use it sparingly.  The API
 is also not very stable so things may change.
 
-```
-component.contextTypes = {
-store: React.PropTypes.object,
-}
-```
-
 ## React Redux
 This is utility library that helps greatly reduce the amount of boilerplate
 required when writing `Provider` and container components that connect to the
@@ -299,7 +297,7 @@ store state and dispatch action to the container component.  All we have to do
 is to define two functions to pass to the `connect` function, which will help
 create the container component.
 
-```
+```js
 const mapStateToProps = (state, props) => {
   return {
     propName1: ...,
