@@ -61,10 +61,13 @@ const createStore = (reducer) => {
 ## Avoid Array Mutations
 Recall that in Redux, we want to avoid mutating arrays and state.  Typically
 when working with arrays, we tend to use `push` and `splice`, but these mutate
-the original object (as you can check with the `deepFreeze` library).
+the original array (as you can check with the `deepFreeze` library).
 
 Instead, we should use `concat`, `slice`, `map` and the spread operator
 in ES6 `...` to accomplish these array mutations.
+
+To avoid object mutations, we should use `Object.assign()` in ES5 and the
+spread operator `...` in ES6.
 
 ```js
 // Add an item
