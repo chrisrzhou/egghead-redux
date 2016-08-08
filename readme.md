@@ -66,9 +66,6 @@ the original array (as you can check with the `deepFreeze` library).
 Instead, we should use `concat`, `slice`, `map` and the spread operator
 in ES6 `...` to accomplish these array mutations.
 
-To avoid object mutations, we should use `Object.assign()` in ES5 and the
-spread operator `...` in ES6.
-
 ```js
 // Add an item
 list.push(0);  // mutations
@@ -85,8 +82,8 @@ list[index]++;  // mutations
 ```
 
 ## Avoid Object Mutations
-To avoid object mutations, we should use `Object.assign()` in ES6 and the spread
-operator in ES7 `...`
+To avoid object mutations, we should use `Object.assign()` in ES5 and the
+spread operator `...` in ES6.
 
 
 ```js
